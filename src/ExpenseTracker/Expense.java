@@ -8,7 +8,6 @@ public class Expense {
     public int indexValue = 0;
 
     public void addExpenses(String[] names, double[] amounts, Scanner scanner) {
-
         double expensesAmount = 0;
         System.out.print("Enter you item name: ");
         String expensesName = scanner.next();
@@ -20,7 +19,7 @@ public class Expense {
                     if (expensesAmount <= 0) {
                         throw new InvalidAmount("Invalid Amount! Amount must be above 0");
                     } else {
-                        if (indexValue == names.length - 1) {
+                        if (indexValue == names.length) {
                             System.out.println("Sorry You are out of memory");
                         } else {
                             names[indexValue] = expensesName;
@@ -102,9 +101,9 @@ public class Expense {
                     } else {
                         names[j] = names[j + 1];
                         amounts[j] = amounts[j + 1];
-                        indexValue--;
                     }
                 }
+                indexValue--;
                 found = false;
             }
         }
