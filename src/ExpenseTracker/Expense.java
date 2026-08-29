@@ -39,11 +39,16 @@ public class Expense {
     }
 
     public void displayAllExpenses(String[] names, double[] amounts) {
-        for (int i = 0; i < names.length; i++) {
-            if (names[i] != null) {
-                System.out.println(names[i] + ": " + amounts[i]);
-            } else {
-                break;
+        if (names[0] == null) {
+            System.out.println("Nothing to show");
+        } else {
+            for (int i = 0; i < names.length; i++) {
+
+                if (names[i] != null) {
+                    System.out.println(names[i] + ": " + amounts[i]);
+                } else {
+                    break;
+                }
             }
         }
     }
@@ -73,18 +78,28 @@ public class Expense {
 
     public void searchExpenses(Scanner scanner, double[] amounts, String[] names) {
         boolean notFound = true;
-        System.out.print("Enter a search amount: ");
-        double amount = scanner.nextDouble();
 
-        for (int i = 0; i < amounts.length; i++) {
-            if (amounts[i] == amount) {
-                System.out.println(names[i] + ": " + amounts[i]);
-                notFound = false;
+        try {
+            System.out.print("Enter a search amount: ");
+            if (scanner.hasNextDouble()) {
+                double amount = scanner.nextDouble();
+
+                for (int i = 0; i < amounts.length; i++) {
+                    if (amounts[i] == amount) {
+                        System.out.println(names[i] + ": " + amounts[i]);
+                        notFound = false;
+                    }
+                }
+            } else {
+                String invalidAmount = scanner.next();
+                throw new InputMismatchException("Please add valid number type amount: \"" + invalidAmount + "\" is invalid amount");
             }
-        }
 
-        if (notFound) {
-            System.out.println("No expenses found");
+            if (notFound) {
+                System.out.println("No expenses found");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -129,31 +144,41 @@ public class Expense {
             System.out.println("6. Delete Expenses");
             System.out.println("7. Exit");
 
-            System.out.print("Choose your number: ");
-            int userChoice = scanner.nextInt();
+            try {
+                System.out.print("Choose your number: ");
+                if (scanner.hasNextInt()) {
+                    int userChoice = scanner.nextInt();
 
-            switch (userChoice) {
-                case 1 -> {
-                    addExpenses(names, amounts, scanner);
+                    switch (userChoice) {
+                        case 1 -> {
+                            addExpenses(names, amounts, scanner);
+                        }
+                        case 2 -> {
+                            displayAllExpenses(names, amounts);
+                        }
+                        case 3 -> {
+                            totalExpenses(amounts);
+                        }
+                        case 4 -> {
+                            highestExpenses(amounts);
+                        }
+                        case 5 -> {
+                            searchExpenses(scanner, amounts, names);
+                        }
+                        case 6 -> {
+                            deleteExpenses(names, amounts, scanner);
+                        }
+                        case 7 -> isRunning = false;
+                        default -> System.out.println("Invalid Command");
+                    }
+                } else {
+                    scanner.next();
+                    throw new InputMismatchException("Enter a valid number that is specified above");
                 }
-                case 2 -> {
-                    displayAllExpenses(names, amounts);
-                }
-                case 3 -> {
-                    totalExpenses(amounts);
-                }
-                case 4 -> {
-                    highestExpenses(amounts);
-                }
-                case 5 -> {
-                    searchExpenses(scanner, amounts, names);
-                }
-                case 6 -> {
-                    deleteExpenses(names, amounts, scanner);
-                }
-                case 7 -> isRunning = false;
-                default -> System.out.println("Invalid Command");
+            } catch (InputMismatchException e) {
+                System.out.println(e.getMessage());
             }
+
         }
     }
 
