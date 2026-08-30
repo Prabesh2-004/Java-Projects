@@ -2,15 +2,22 @@ package ExpenseTracker;
 
 
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Expense {
-    public int indexValue = 0;
+    private int indexValue = 0;
 
     public void addExpenses(String[] names, double[] amounts, Scanner scanner) {
         double expensesAmount = 0;
-        System.out.print("Enter you item name: ");
-        String expensesName = scanner.next();
+        String expensesName;
+        try {
+            System.out.print("Enter you item name: ");
+            expensesName = scanner.next();
+        } catch (NoSuchElementException e) {
+            System.out.println("No input available for item name.");
+            return;
+        }
         do {
             try {
                 System.out.print("Enter you item amount: ");
@@ -21,6 +28,7 @@ public class Expense {
                     } else {
                         if (indexValue == names.length) {
                             System.out.println("Sorry You are out of memory");
+                            return;
                         } else {
                             names[indexValue] = expensesName;
                             amounts[indexValue] = expensesAmount;
@@ -33,93 +41,117 @@ public class Expense {
                 }
             } catch (InvalidAmount | InputMismatchException e) {
                 System.out.println(e.getMessage());
+            } catch (NoSuchElementException e) {
+                System.out.println("No input available for amount.");
+                return;
             }
         } while (expensesAmount <= 0);
-
     }
 
     public void displayAllExpenses(String[] names, double[] amounts) {
-        if (names[0] == null) {
+        if (indexValue == 0) {
             System.out.println("Nothing to show");
         } else {
-            for (int i = 0; i < names.length; i++) {
-
-                if (names[i] != null) {
-                    System.out.println(names[i] + ": " + amounts[i]);
-                } else {
-                    break;
-                }
+            for (int i = 0; i < indexValue; i++) {
+                System.out.println(names[i] + ": " + amounts[i]);
             }
         }
     }
 
     public void totalExpenses(double[] amounts) {
+        if (indexValue == 0) {
+            System.out.println("Please add expenses first");
+            return;
+        }
         System.out.print("Your total expenses are: ");
         double sum = 0;
-        for (double amount : amounts) {
-            sum += amount;
+        for (int i = 0; i < indexValue; i++) {
+            sum += amounts[i];
         }
         System.out.println(sum);
     }
 
     public void highestExpenses(double[] amounts) {
-        double highest = amounts[0];
-        if (highest <= 0) {
+        if (indexValue == 0) {
             System.out.println("Please add expenses first");
-        } else {
-            for (double amount : amounts) {
-                if (highest < amount) {
-                    highest = amount;
-                }
-            }
-            System.out.println(highest);
+            return;
         }
+        double highest = amounts[0];
+        for (int i = 1; i < indexValue; i++) {
+            if (amounts[i] > highest) {
+                highest = amounts[i];
+            }
+        }
+        System.out.println(highest);
     }
 
     public void searchExpenses(Scanner scanner, double[] amounts, String[] names) {
+        if (indexValue == 0) {
+            System.out.println("Please add expenses first");
+            return;
+        }
+
         boolean notFound = true;
+        boolean invalid = true;
 
-        try {
-            System.out.print("Enter a search amount: ");
-            if (scanner.hasNextDouble()) {
-                double amount = scanner.nextDouble();
+        while (invalid) {
+            try {
+                System.out.print("Enter a search amount: ");
+                if (scanner.hasNextDouble()) {
+                    double amount = scanner.nextDouble();
+                    invalid = false;
 
-                for (int i = 0; i < amounts.length; i++) {
-                    if (amounts[i] == amount) {
-                        System.out.println(names[i] + ": " + amounts[i]);
-                        notFound = false;
+                    for (int i = 0; i < indexValue; i++) {
+                        if (amounts[i] == amount) {
+                            System.out.println(names[i] + ": " + amounts[i]);
+                            notFound = false;
+                        }
                     }
-                }
-            } else {
-                String invalidAmount = scanner.next();
-                throw new InputMismatchException("Please add valid number type amount: \"" + invalidAmount + "\" is invalid amount");
-            }
 
-            if (notFound) {
-                System.out.println("No expenses found");
+                    if (notFound) {
+                        System.out.println("No expenses found");
+                    }
+                } else {
+                    String invalidAmount = scanner.next();
+                    throw new InputMismatchException("Please add valid number type amount: \"" + invalidAmount + "\" is invalid amount");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(e.getMessage());
+            } catch (NoSuchElementException e) {
+                System.out.println("No input available for search amount.");
+                return;
             }
-        } catch (InputMismatchException e) {
-            System.out.println(e.getMessage());
         }
     }
 
     public void deleteExpenses(String[] names, double[] amounts, Scanner scanner) {
-        boolean found = true;
-        System.out.print("Enter a expenses name you want to delete: ");
-        String expensesName = scanner.next();
+        if (indexValue == 0) {
+            System.out.println("Please add expenses first");
+            return;
+        }
 
-        for (int i = 0; i < names.length; i++) {
+        boolean found = true;
+        String expensesName;
+
+        try {
+            System.out.print("Enter a expenses name you want to delete: ");
+            expensesName = scanner.next();
+        } catch (NoSuchElementException e) {
+            System.out.println("No input available for expense name.");
+            return;
+        }
+
+        for (int i = 0; i < indexValue; i++) {
             if (expensesName.equals(names[i])) {
-                for (int j = i; j < names.length; j++) {
-                    if (j == names.length - 1) {
-                        break;
-                    } else {
-                        names[j] = names[j + 1];
-                        amounts[j] = amounts[j + 1];
-                    }
+                for (int j = i; j < indexValue - 1; j++) {
+                    names[j] = names[j + 1];
+                    amounts[j] = amounts[j + 1];
                 }
                 indexValue--;
+                names[indexValue] = null;
+                amounts[indexValue] = 0;
                 found = false;
+                break;
             }
         }
 
@@ -177,6 +209,9 @@ public class Expense {
                 }
             } catch (InputMismatchException e) {
                 System.out.println(e.getMessage());
+            } catch (NoSuchElementException e) {
+                System.out.println("No input available. Exiting.");
+                isRunning = false;
             }
 
         }
