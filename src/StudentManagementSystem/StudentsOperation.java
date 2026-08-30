@@ -59,23 +59,54 @@ public class StudentsOperation {
     }
 
     public void getAllStudent(StudentDetailsModifier[] student) {
-        System.out.println();
         for (int i = 0; i < currentIndexPosition; i++) {
             System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
         }
-        System.out.println();
+    }
+
+    public void searchStudent(Scanner scanner, StudentDetailsModifier[] student) {
+        boolean isRunning = true;
+        boolean notFound = true;
+        while (isRunning) {
+            try {
+                System.out.print("Enter a name or Id to search for Student: ");
+                if (scanner.hasNextInt()) {
+                    int id = scanner.nextInt();
+                    for (int i = 0; i < currentIndexPosition; i++) {
+                        if (id == student[i].getId()) {
+                            System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
+                            notFound = false;
+                        }
+                    }
+                    isRunning = false;
+                } else {
+                    String name = scanner.next();
+                    for (int i = 0; i < currentIndexPosition; i++) {
+                        if (name.equals(student[i].getName())) {
+                            System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
+                            notFound = false;
+                        }
+                    }
+                    isRunning = false;
+                }
+
+                if (notFound) {
+                    System.out.println("Student Not Found");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     public void luncher() {
         Scanner scanner = new Scanner(System.in);
-        StudentDetailsModifier[] student = new StudentDetailsModifier[3];
-//        student[0] = new StudentDetailsModifier(1, "Alex", 12, 89);
-//        student[1] = new StudentDetailsModifier(2, "John", 10, 85);
-//        student[2] = new StudentDetailsModifier(3, "Tony", 14, 70);
+        StudentDetailsModifier[] student = new StudentDetailsModifier[10];
 
         boolean running = true;
         while (running) {
             try {
+                System.out.println();
                 System.out.println("1. Add Students");
                 System.out.println("2. Display All Students");
                 System.out.println("3. Search Students");
@@ -91,7 +122,7 @@ public class StudentsOperation {
                     switch (userChoice) {
                         case 1 -> addStudents(student, scanner);
                         case 2 -> getAllStudent(student);
-                        case 3 -> System.out.println("Choice Three");
+                        case 3 -> searchStudent(scanner, student);
                         case 4 -> System.out.println("Choice Four");
                         case 5 -> System.out.println("Choice Five");
                         case 6 -> System.out.println("Choice Six");
