@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Expense {
-    private int indexValue = 0;
+    private int currentPosition = 0;
 
     public void addExpenses(String[] names, double[] amounts, Scanner scanner) {
         double expensesAmount = 0;
@@ -26,13 +26,13 @@ public class Expense {
                     if (expensesAmount <= 0) {
                         throw new InvalidAmount("Invalid Amount! Amount must be above 0");
                     } else {
-                        if (indexValue == names.length) {
+                        if (currentPosition == names.length) {
                             System.out.println("Sorry You are out of memory");
                             return;
                         } else {
-                            names[indexValue] = expensesName;
-                            amounts[indexValue] = expensesAmount;
-                            indexValue++;
+                            names[currentPosition] = expensesName;
+                            amounts[currentPosition] = expensesAmount;
+                            currentPosition++;
                         }
                     }
                 } else {
@@ -49,35 +49,35 @@ public class Expense {
     }
 
     public void displayAllExpenses(String[] names, double[] amounts) {
-        if (indexValue == 0) {
+        if (currentPosition == 0) {
             System.out.println("Nothing to show");
         } else {
-            for (int i = 0; i < indexValue; i++) {
+            for (int i = 0; i < currentPosition; i++) {
                 System.out.println(names[i] + ": " + amounts[i]);
             }
         }
     }
 
     public void totalExpenses(double[] amounts) {
-        if (indexValue == 0) {
+        if (currentPosition == 0) {
             System.out.println("Please add expenses first");
             return;
         }
         System.out.print("Your total expenses are: ");
         double sum = 0;
-        for (int i = 0; i < indexValue; i++) {
+        for (int i = 0; i < currentPosition; i++) {
             sum += amounts[i];
         }
         System.out.println(sum);
     }
 
     public void highestExpenses(double[] amounts) {
-        if (indexValue == 0) {
+        if (currentPosition == 0) {
             System.out.println("Please add expenses first");
             return;
         }
         double highest = amounts[0];
-        for (int i = 1; i < indexValue; i++) {
+        for (int i = 1; i < currentPosition; i++) {
             if (amounts[i] > highest) {
                 highest = amounts[i];
             }
@@ -86,7 +86,7 @@ public class Expense {
     }
 
     public void searchExpenses(Scanner scanner, double[] amounts, String[] names) {
-        if (indexValue == 0) {
+        if (currentPosition == 0) {
             System.out.println("Please add expenses first");
             return;
         }
@@ -101,7 +101,7 @@ public class Expense {
                     double amount = scanner.nextDouble();
                     invalid = false;
 
-                    for (int i = 0; i < indexValue; i++) {
+                    for (int i = 0; i < currentPosition; i++) {
                         if (amounts[i] == amount) {
                             System.out.println(names[i] + ": " + amounts[i]);
                             notFound = false;
@@ -125,7 +125,7 @@ public class Expense {
     }
 
     public void deleteExpenses(String[] names, double[] amounts, Scanner scanner) {
-        if (indexValue == 0) {
+        if (currentPosition == 0) {
             System.out.println("Please add expenses first");
             return;
         }
@@ -141,15 +141,15 @@ public class Expense {
             return;
         }
 
-        for (int i = 0; i < indexValue; i++) {
+        for (int i = 0; i < currentPosition; i++) {
             if (expensesName.equals(names[i])) {
-                for (int j = i; j < indexValue - 1; j++) {
+                for (int j = i; j < currentPosition - 1; j++) {
                     names[j] = names[j + 1];
                     amounts[j] = amounts[j + 1];
                 }
-                indexValue--;
-                names[indexValue] = null;
-                amounts[indexValue] = 0;
+                currentPosition--;
+                names[currentPosition] = null;
+                amounts[currentPosition] = 0;
                 found = false;
                 break;
             }
