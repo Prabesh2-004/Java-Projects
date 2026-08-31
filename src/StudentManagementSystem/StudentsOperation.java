@@ -99,6 +99,47 @@ public class StudentsOperation {
         }
     }
 
+    public void updateStudent(StudentDetailsModifier[] student, Scanner scanner) {
+        boolean notFound = true;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
+        }
+
+        try {
+            System.out.print("Choose student to Update using their ID: ");
+            if (scanner.hasNextInt()) {
+                int id = scanner.nextInt();
+                scanner.nextLine();
+                for (int i = 0; i < currentIndexPosition; i++) {
+                    if (student[i].id == id) {
+                        System.out.print("Enter a name " + "(Previous name was " + student[i].getName() + "): ");
+                        String name = scanner.nextLine();
+                        System.out.print("Enter a age " + "(Previous age was " + student[i].getAge() + "): ");
+                        int age = scanner.nextInt();
+                        System.out.print("Enter a marks " + "(Previous marks was " + student[i].getMarks() + "): ");
+                        double marks = scanner.nextDouble();
+
+                        student[i].name = name;
+                        student[i].age = age;
+                        student[i].marks = marks;
+
+                        notFound = false;
+                    }
+                }
+            } else {
+                String invalidInput = scanner.next();
+                System.out.println(invalidInput + ": is not a valid ID");
+                notFound = false;
+            }
+
+            if(notFound) {
+                System.out.println("User not found");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void luncher() {
         Scanner scanner = new Scanner(System.in);
         StudentDetailsModifier[] student = new StudentDetailsModifier[10];
@@ -123,7 +164,7 @@ public class StudentsOperation {
                         case 1 -> addStudents(student, scanner);
                         case 2 -> getAllStudent(student);
                         case 3 -> searchStudent(scanner, student);
-                        case 4 -> System.out.println("Choice Four");
+                        case 4 -> updateStudent(student, scanner);
                         case 5 -> System.out.println("Choice Five");
                         case 6 -> System.out.println("Choice Six");
                         case 7 -> System.out.println("Choice Seven");
