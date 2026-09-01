@@ -132,12 +132,55 @@ public class StudentsOperation {
                 notFound = false;
             }
 
-            if(notFound) {
+            if (notFound) {
                 System.out.println("User not found");
             }
         } catch (InputMismatchException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void deleteStudent(StudentDetailsModifier[] student, Scanner scanner) {
+        boolean notFound = true;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
+        }
+
+        try {
+            System.out.print("Enter student you wanna delete using ID: ");
+            if (scanner.hasNextInt()) {
+                int id = scanner.nextInt();
+                for (int i = 0; i < currentIndexPosition - 1; i++) {
+                    if (student[i].getId() == id) {
+                        student[i].id = student[i + 1].id;
+                        student[i].name = student[i + 1].name;
+                        student[i].age = student[i + 1].age;
+                        student[i].marks = student[i + 1].marks;
+
+                        notFound = false;
+                    }
+                }
+                currentIndexPosition--;
+                student[currentIndexPosition].id = 0;
+                student[currentIndexPosition].name = null;
+                student[currentIndexPosition].age = 0;
+                student[currentIndexPosition].marks = 0;
+            }
+
+            if (notFound) {
+                System.out.println("User not found");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void averageMarks(StudentDetailsModifier[] student) {
+        double marks = 0;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            marks += student[i].getMarks();
+        }
+        System.out.println(marks/currentIndexPosition);
     }
 
     public void luncher() {
@@ -165,8 +208,8 @@ public class StudentsOperation {
                         case 2 -> getAllStudent(student);
                         case 3 -> searchStudent(scanner, student);
                         case 4 -> updateStudent(student, scanner);
-                        case 5 -> System.out.println("Choice Five");
-                        case 6 -> System.out.println("Choice Six");
+                        case 5 -> deleteStudent(student, scanner);
+                        case 6 -> averageMarks(student);
                         case 7 -> System.out.println("Choice Seven");
                         case 8 -> running = false;
                         default -> System.out.println("Invalid Choice! Please insert listed Options");
