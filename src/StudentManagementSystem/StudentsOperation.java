@@ -183,6 +183,16 @@ public class StudentsOperation {
         System.out.println(marks/currentIndexPosition);
     }
 
+    public void highestMarks(StudentDetailsModifier[] student) {
+        double highest = student[0].getMarks();
+        for (int i=0;i<currentIndexPosition;i++) {
+            if(student[i].getMarks()>highest) {
+                highest = student[i].getMarks();
+            }
+        }
+        System.out.println(highest);
+    }
+
     public void luncher() {
         Scanner scanner = new Scanner(System.in);
         StudentDetailsModifier[] student = new StudentDetailsModifier[10];
@@ -210,7 +220,7 @@ public class StudentsOperation {
                         case 4 -> updateStudent(student, scanner);
                         case 5 -> deleteStudent(student, scanner);
                         case 6 -> averageMarks(student);
-                        case 7 -> System.out.println("Choice Seven");
+                        case 7 -> highestMarks(student);
                         case 8 -> running = false;
                         default -> System.out.println("Invalid Choice! Please insert listed Options");
                     }
