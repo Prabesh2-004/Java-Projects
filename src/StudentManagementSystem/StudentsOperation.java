@@ -111,7 +111,7 @@ public class StudentsOperation {
                 int id = scanner.nextInt();
                 scanner.nextLine();
                 for (int i = 0; i < currentIndexPosition; i++) {
-                    if (student[i].id == id) {
+                    if (student[i].getId() == id) {
                         System.out.print("Enter a name " + "(Previous name was " + student[i].getName() + "): ");
                         String name = scanner.nextLine();
                         System.out.print("Enter a age " + "(Previous age was " + student[i].getAge() + "): ");
@@ -119,9 +119,9 @@ public class StudentsOperation {
                         System.out.print("Enter a marks " + "(Previous marks was " + student[i].getMarks() + "): ");
                         double marks = scanner.nextDouble();
 
-                        student[i].name = name;
-                        student[i].age = age;
-                        student[i].marks = marks;
+                        student[i].setName(name);
+                        student[i].setAge(age);
+                        student[i].setMarks(marks);
 
                         notFound = false;
                     }
@@ -150,21 +150,23 @@ public class StudentsOperation {
             System.out.print("Enter student you wanna delete using ID: ");
             if (scanner.hasNextInt()) {
                 int id = scanner.nextInt();
-                for (int i = 0; i < currentIndexPosition - 1; i++) {
+                for (int i = 0; i < currentIndexPosition; i++) {
                     if (student[i].getId() == id) {
-                        student[i].id = student[i + 1].id;
-                        student[i].name = student[i + 1].name;
-                        student[i].age = student[i + 1].age;
-                        student[i].marks = student[i + 1].marks;
-
+                        for (int j = i; j < currentIndexPosition - 1; j++) {
+                            student[j].setId(student[j + 1].getId());
+                            student[j].setName(student[j + 1].getName());
+                            student[j].setAge(student[j + 1].getAge());
+                            student[j].setMarks(student[j + 1].getMarks());
+                        }
+                        currentIndexPosition--;
+                        student[currentIndexPosition].setId(0);
+                        student[currentIndexPosition].setName(null);
+                        student[currentIndexPosition].setAge(0);
+                        student[currentIndexPosition].setMarks(0);
                         notFound = false;
+                        break;
                     }
                 }
-                currentIndexPosition--;
-                student[currentIndexPosition].id = 0;
-                student[currentIndexPosition].name = null;
-                student[currentIndexPosition].age = 0;
-                student[currentIndexPosition].marks = 0;
             }
 
             if (notFound) {
@@ -180,17 +182,23 @@ public class StudentsOperation {
         for (int i = 0; i < currentIndexPosition; i++) {
             marks += student[i].getMarks();
         }
-        System.out.println(marks/currentIndexPosition);
+        System.out.println(marks / currentIndexPosition);
     }
 
     public void highestMarks(StudentDetailsModifier[] student) {
         double highest = student[0].getMarks();
-        for (int i=0;i<currentIndexPosition;i++) {
-            if(student[i].getMarks()>highest) {
+        int id = 0;
+        String name = "";
+        int age = 0;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            if (student[i].getMarks() > highest) {
                 highest = student[i].getMarks();
+                name = student[i].getName();
+                id = student[i].getId();
+                age = student[i].getAge();
             }
+            System.out.println(id + " " + name + " " + age + " " + highest);
         }
-        System.out.println(highest);
     }
 
     public void luncher() {
