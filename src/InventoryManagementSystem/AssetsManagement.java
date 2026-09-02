@@ -53,6 +53,22 @@ public class AssetsManagement {
         }
     }
 
+    public void searchProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+        boolean notFound = true;
+        System.out.print("Enter a product name to search for product: ");
+        String name = scanner.nextLine();
+
+        for (int i=0;i<currentIndexPosition;i++) {
+            if(assetsStorages[i].getName().toLowerCase().equalsIgnoreCase(name)) {
+                System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
+                notFound = false;
+            }
+        }
+
+        if (notFound) {
+            System.out.println("Product not found");
+        }
+    }
     public void launcher() {
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
@@ -79,7 +95,7 @@ public class AssetsManagement {
                 switch (userChoice) {
                     case 1 -> addProduct(assetsStorages, scanner);
                     case 2 -> getAllProduct(assetsStorages);
-                    case 3 -> System.out.println("Choice Three");
+                    case 3 -> searchProduct(assetsStorages, scanner);
                     case 4 -> System.out.println("Choice Four");
                     case 5 -> System.out.println("Choice Five");
                     case 6 -> System.out.println("Choice Six");
