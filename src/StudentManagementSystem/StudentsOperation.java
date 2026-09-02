@@ -7,19 +7,34 @@ import java.util.Scanner;
 public class StudentsOperation {
     int currentIndexPosition = 0;
 
-    public void addStudents(StudentDetailsModifier[] student, Scanner scanner) {
+    public void addStudents(StudentDetails[] student, Scanner scanner) {
         int id = 0;
         String name = "";
         int age = 0;
         double marks = 0;
         boolean isRunning = true;
+        boolean found = false;
         try {
             while (isRunning) {
                 System.out.print("Enter a student Id: ");
                 if (scanner.hasNextInt()) {
-                    id = scanner.nextInt();
+                    int userId = scanner.nextInt();
                     scanner.nextLine();
-                    isRunning = false;
+
+                    for (int i = 0; i < currentIndexPosition; i++) {
+                        if (student[i].getId() == userId) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found) {
+                        System.out.println("Studnet with this Id already exist");
+                    } else {
+                        id = userId;
+                        break;
+                    }
+                    found = false;
                 } else {
                     String invalidInput = scanner.next();
                     System.out.println(invalidInput + ": is a invalid id type use number");
@@ -50,57 +65,57 @@ public class StudentsOperation {
                     System.out.println(invalidInput + ": is a invalid marks type use number");
                 }
             }
-            student[currentIndexPosition] = new StudentDetailsModifier(id, name, age, marks);
-            currentIndexPosition++;
+            if (currentIndexPosition != student.length) {
+                student[currentIndexPosition] = new StudentDetails(id, name, age, marks);
+                currentIndexPosition++;
+            } else {
+                System.out.println("Out of memory cannot add more students");
+            }
         } catch (InputMismatchException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Input didn't match user text in text type and number in number type" + e.getMessage());
         }
 
     }
 
-    public void getAllStudent(StudentDetailsModifier[] student) {
+    public void getAllStudents(StudentDetails[] student) {
         for (int i = 0; i < currentIndexPosition; i++) {
             System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
         }
     }
 
-    public void searchStudent(Scanner scanner, StudentDetailsModifier[] student) {
-        boolean isRunning = true;
-        boolean notFound = true;
-        while (isRunning) {
-            try {
-                System.out.print("Enter a name or Id to search for Student: ");
-                if (scanner.hasNextInt()) {
-                    int id = scanner.nextInt();
-                    for (int i = 0; i < currentIndexPosition; i++) {
-                        if (id == student[i].getId()) {
-                            System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
-                            notFound = false;
-                        }
-                    }
-                    isRunning = false;
-                } else {
-                    String name = scanner.next();
-                    for (int i = 0; i < currentIndexPosition; i++) {
-                        if (name.equals(student[i].getName())) {
-                            System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
-                            notFound = false;
-                        }
-                    }
-                    isRunning = false;
+    public void searchStudent(Scanner scanner, StudentDetails[] student) {
+        boolean userNotFound = true;
+        System.out.print("Enter a name or Id to search for Student: ");
+        if (scanner.hasNextInt()) {
+            int id = scanner.nextInt();
+            for (int i = 0; i < currentIndexPosition; i++) {
+                if (id == student[i].getId()) {
+                    System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
+                    userNotFound = false;
                 }
-
-                if (notFound) {
-                    System.out.println("Student Not Found");
+            }
+        } else {
+            String name = scanner.next().toLowerCase();
+            for (int i = 0; i < currentIndexPosition; i++) {
+                if (name.equals(student[i].getName().toLowerCase())) {
+                    System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
+                    userNotFound = false;
                 }
-            } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
             }
         }
+
+        if (userNotFound) {
+            System.out.println("Student Not Found");
+        }
+
     }
 
-    public void updateStudent(StudentDetailsModifier[] student, Scanner scanner) {
+    public void updateStudent(StudentDetails[] student, Scanner scanner) {
         boolean notFound = true;
+        boolean isValidInput = true;
+        String name = "";
+        int age = 0;
+        double marks = 0;
         for (int i = 0; i < currentIndexPosition; i++) {
             System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
         }
@@ -113,11 +128,28 @@ public class StudentsOperation {
                 for (int i = 0; i < currentIndexPosition; i++) {
                     if (student[i].getId() == id) {
                         System.out.print("Enter a name " + "(Previous name was " + student[i].getName() + "): ");
-                        String name = scanner.nextLine();
-                        System.out.print("Enter a age " + "(Previous age was " + student[i].getAge() + "): ");
-                        int age = scanner.nextInt();
-                        System.out.print("Enter a marks " + "(Previous marks was " + student[i].getMarks() + "): ");
-                        double marks = scanner.nextDouble();
+                        name = scanner.nextLine();
+                        while (isValidInput) {
+                            System.out.print("Enter a age " + "(Previous age was " + student[i].getAge() + "): ");
+                            if (scanner.hasNextInt()) {
+                                age = scanner.nextInt();
+                                isValidInput = false;
+                            } else {
+                                String invalidInput = scanner.next();
+                                System.out.println(invalidInput + ": is invalid input please use number");
+                            }
+                        }
+                        isValidInput = true;
+                        while (isValidInput) {
+                            System.out.print("Enter a marks " + "(Previous marks was " + student[i].getMarks() + "): ");
+                            if (scanner.hasNextDouble()) {
+                                marks = scanner.nextDouble();
+                                isValidInput = false;
+                            } else {
+                                String invalidInput = scanner.next();
+                                System.out.println(invalidInput + ": is a invalid input please number");
+                            }
+                        }
 
                         student[i].setName(name);
                         student[i].setAge(age);
@@ -140,7 +172,7 @@ public class StudentsOperation {
         }
     }
 
-    public void deleteStudent(StudentDetailsModifier[] student, Scanner scanner) {
+    public void deleteStudent(StudentDetails[] student, Scanner scanner) {
         boolean notFound = true;
         for (int i = 0; i < currentIndexPosition; i++) {
             System.out.println(student[i].getId() + " " + student[i].getName() + " " + student[i].getAge() + " " + student[i].getMarks());
@@ -177,33 +209,35 @@ public class StudentsOperation {
         }
     }
 
-    public void averageMarks(StudentDetailsModifier[] student) {
-        double marks = 0;
-        for (int i = 0; i < currentIndexPosition; i++) {
-            marks += student[i].getMarks();
+    public void averageMarks(StudentDetails[] student) {
+        if (currentIndexPosition != 0) {
+            double marks = 0;
+            for (int i = 0; i < currentIndexPosition; i++) {
+                marks += student[i].getMarks();
+            }
+            System.out.println(marks / currentIndexPosition);
+        } else {
+            System.out.println("Please add at least 1 Student data");
         }
-        System.out.println(marks / currentIndexPosition);
     }
 
-    public void highestMarks(StudentDetailsModifier[] student) {
+    public void highestMarks(StudentDetails[] student) {
         double highest = student[0].getMarks();
         int id = 0;
         String name = "";
-        int age = 0;
         for (int i = 0; i < currentIndexPosition; i++) {
             if (student[i].getMarks() > highest) {
                 highest = student[i].getMarks();
-                name = student[i].getName();
                 id = student[i].getId();
-                age = student[i].getAge();
+                name = student[i].getName();
             }
-            System.out.println(id + " " + name + " " + age + " " + highest);
         }
+        System.out.println("Highest mark " + highest + " which is achieve by " + name + " whose roll is " + id);
     }
 
-    public void luncher() {
+    public void launcher() {
         Scanner scanner = new Scanner(System.in);
-        StudentDetailsModifier[] student = new StudentDetailsModifier[10];
+        StudentDetails[] student = new StudentDetails[10];
 
         boolean running = true;
         while (running) {
@@ -223,7 +257,7 @@ public class StudentsOperation {
                     int userChoice = scanner.nextInt();
                     switch (userChoice) {
                         case 1 -> addStudents(student, scanner);
-                        case 2 -> getAllStudent(student);
+                        case 2 -> getAllStudents(student);
                         case 3 -> searchStudent(scanner, student);
                         case 4 -> updateStudent(student, scanner);
                         case 5 -> deleteStudent(student, scanner);

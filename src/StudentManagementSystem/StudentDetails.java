@@ -1,12 +1,12 @@
 package StudentManagementSystem;
 
-public class StudentDetailsModifier {
+public class StudentDetails {
     private int age;
     private int id;
     private double marks;
     private String name;
 
-    StudentDetailsModifier(int id, String name, int age, double marks) {
+    StudentDetails(int id, String name, int age, double marks) {
         this.id = id;
         this.name = name;
         this.age = age;
