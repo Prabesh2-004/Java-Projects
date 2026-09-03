@@ -69,6 +69,27 @@ public class AssetsManagement {
             System.out.println("Product not found");
         }
     }
+
+    public void updateProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+
+    }
+
+    public void addStock(AssetsStorage[] assetsStorages, Scanner scanner) {
+
+    }
+
+    public void sellProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+
+    }
+
+    public void deleteProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+
+    }
+
+    public void getLowStockProduct() {
+
+    }
+
     public void launcher() {
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
@@ -96,11 +117,11 @@ public class AssetsManagement {
                     case 1 -> addProduct(assetsStorages, scanner);
                     case 2 -> getAllProduct(assetsStorages);
                     case 3 -> searchProduct(assetsStorages, scanner);
-                    case 4 -> System.out.println("Choice Four");
-                    case 5 -> System.out.println("Choice Five");
-                    case 6 -> System.out.println("Choice Six");
-                    case 7 -> System.out.println("Choice Seven");
-                    case 8 -> System.out.println("Choice Eight");
+                    case 4 -> updateProduct(assetsStorages, scanner);
+                    case 5 -> addStock(assetsStorages, scanner);
+                    case 6 -> sellProduct(assetsStorages, scanner);
+                    case 7 -> deleteProduct(assetsStorages, scanner);
+                    case 8 -> getLowStockProduct();
                     case 9 -> isRunning = false;
                     default -> System.out.println("Invalid choice please choose listed number only");
                 }
