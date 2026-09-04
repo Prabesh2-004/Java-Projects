@@ -58,8 +58,8 @@ public class AssetsManagement {
         System.out.print("Enter a product name to search for product: ");
         String name = scanner.nextLine();
 
-        for (int i=0;i<currentIndexPosition;i++) {
-            if(assetsStorages[i].getName().toLowerCase().equalsIgnoreCase(name)) {
+        for (int i = 0; i < currentIndexPosition; i++) {
+            if (assetsStorages[i].getName().toLowerCase().equalsIgnoreCase(name)) {
                 System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
                 notFound = false;
             }
@@ -75,7 +75,31 @@ public class AssetsManagement {
     }
 
     public void addStock(AssetsStorage[] assetsStorages, Scanner scanner) {
+        boolean notFound = true;
 
+        for (int i = 0; i < currentIndexPosition; i++) {
+            System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
+        }
+        System.out.print("Please enter a product Id you wanna add stock to: ");
+        if(scanner.hasNextInt()) {
+            int productId = scanner.nextInt();
+            for (int i = 0; i < currentIndexPosition; i++) {
+                if(assetsStorages[i].getId() == productId) {
+                    System.out.print("Remaining stock: " + assetsStorages[i].getQuantity() + ". Please enter how much you wanna add: ");
+                    int stock = scanner.nextInt();
+                    assetsStorages[i].setQuantity(assetsStorages[i].getQuantity() + stock);
+                    notFound = false;
+                }
+            }
+
+        } else {
+            String invalidInput = scanner.next();
+            System.out.println(invalidInput + ": is a invalid input type");
+        }
+
+        if (notFound) {
+            System.out.println("Product not found");
+        }
     }
 
     public void sellProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
