@@ -81,10 +81,10 @@ public class AssetsManagement {
             System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
         }
         System.out.print("Please enter a product Id you wanna add stock to: ");
-        if(scanner.hasNextInt()) {
+        if (scanner.hasNextInt()) {
             int productId = scanner.nextInt();
             for (int i = 0; i < currentIndexPosition; i++) {
-                if(assetsStorages[i].getId() == productId) {
+                if (assetsStorages[i].getId() == productId) {
                     System.out.print("Remaining stock: " + assetsStorages[i].getQuantity() + ". Please enter how much you wanna add: ");
                     int stock = scanner.nextInt();
                     assetsStorages[i].setQuantity(assetsStorages[i].getQuantity() + stock);
@@ -110,8 +110,12 @@ public class AssetsManagement {
 
     }
 
-    public void getLowStockProduct() {
-
+    public void getLowStockProduct(AssetsStorage[] assetsStorages) {
+        for (int i = 0; i < currentIndexPosition; i++) {
+            if (assetsStorages[i].getQuantity() < 10) {
+                System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
+            }
+        }
     }
 
     public void launcher() {
@@ -145,7 +149,7 @@ public class AssetsManagement {
                     case 5 -> addStock(assetsStorages, scanner);
                     case 6 -> sellProduct(assetsStorages, scanner);
                     case 7 -> deleteProduct(assetsStorages, scanner);
-                    case 8 -> getLowStockProduct();
+                    case 8 -> getLowStockProduct(assetsStorages);
                     case 9 -> isRunning = false;
                     default -> System.out.println("Invalid choice please choose listed number only");
                 }
