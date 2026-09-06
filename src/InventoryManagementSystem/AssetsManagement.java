@@ -71,7 +71,48 @@ public class AssetsManagement {
     }
 
     public void updateProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+        boolean notFound = true;
+        String productName = "";
+        int productQuantity = 0;
+        double productPrice = 0;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
+        }
 
+        System.out.print("Enter a product Id to update: ");
+        if(scanner.hasNextInt()) {
+            int productId = scanner.nextInt();
+            scanner.nextLine();
+            for (int i=0;i<currentIndexPosition; i++) {
+                if(assetsStorages[i].getId() == productId) {
+                    System.out.print("Enter a product name to update: ");
+                    productName = scanner.nextLine();
+                    System.out.print("Enter a product quantity to update: ");
+                    if(scanner.hasNextInt()) {
+                        productQuantity = scanner.nextInt();
+                    } else {
+                        String invalidInput = scanner.next();
+                        System.out.println(invalidInput + ": is a invalid input");
+                    }
+
+                    System.out.print("Enter a product price to update: ");
+                    if(scanner.hasNextDouble()) {
+                        productPrice = scanner.nextDouble();
+                    } else {
+                        String invalidInput = scanner.next();
+                        System.out.println(invalidInput + ": is a invalid input");
+                    }
+                    assetsStorages[i].setName(productName);
+                    assetsStorages[i].setQuantity(productQuantity);
+                    assetsStorages[i].setPrice(productPrice);
+                    notFound = false;
+                }
+            }
+        }
+
+        if (notFound) {
+            System.out.println("Product not found");
+        }
     }
 
     public void addStock(AssetsStorage[] assetsStorages, Scanner scanner) {
