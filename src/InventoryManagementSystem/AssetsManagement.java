@@ -103,7 +103,43 @@ public class AssetsManagement {
     }
 
     public void sellProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+        boolean notFound = true;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
+        }
+        System.out.print("Enter a product Id you wanna sell: ");
+        if (scanner.hasNextInt()) {
+            int productId = scanner.nextInt();
+            for (int i = 0; i < currentIndexPosition; i++) {
+                if (assetsStorages[i].getId() == productId) {
+                    if (assetsStorages[i].getQuantity() > 0) {
+                        System.out.print("Enter a quantity you wanna sell: ");
+                        if(scanner.hasNextInt()) {
+                            int quantity = scanner.nextInt();
+                            if (assetsStorages[i].getQuantity() > quantity) {
+                                assetsStorages[i].setQuantity(assetsStorages[i].getQuantity() - quantity);
+                                System.out.println("Product sold total is: " + quantity * assetsStorages[i].getPrice());
+                            } else {
+                                System.out.println("Requested quantity is more than available stock");
+                            }
+                        } else {
+                            String invalidInput = scanner.next();
+                            System.out.println(invalidInput + ": is a invalid input");
+                        }
+                    } else {
+                        System.out.println("Product is out of stock");
+                    }
+                    notFound = false;
+                }
+            }
+        } else {
+            String invalidInput = scanner.next();
+            System.out.println(invalidInput + ": is a invalid input");
+        }
 
+        if (notFound) {
+            System.out.println("Product not found");
+        }
     }
 
     public void deleteProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
