@@ -80,15 +80,15 @@ public class AssetsManagement {
         }
 
         System.out.print("Enter a product Id to update: ");
-        if(scanner.hasNextInt()) {
+        if (scanner.hasNextInt()) {
             int productId = scanner.nextInt();
             scanner.nextLine();
-            for (int i=0;i<currentIndexPosition; i++) {
-                if(assetsStorages[i].getId() == productId) {
+            for (int i = 0; i < currentIndexPosition; i++) {
+                if (assetsStorages[i].getId() == productId) {
                     System.out.print("Enter a product name to update: ");
                     productName = scanner.nextLine();
                     System.out.print("Enter a product quantity to update: ");
-                    if(scanner.hasNextInt()) {
+                    if (scanner.hasNextInt()) {
                         productQuantity = scanner.nextInt();
                     } else {
                         String invalidInput = scanner.next();
@@ -96,7 +96,7 @@ public class AssetsManagement {
                     }
 
                     System.out.print("Enter a product price to update: ");
-                    if(scanner.hasNextDouble()) {
+                    if (scanner.hasNextDouble()) {
                         productPrice = scanner.nextDouble();
                     } else {
                         String invalidInput = scanner.next();
@@ -155,7 +155,7 @@ public class AssetsManagement {
                 if (assetsStorages[i].getId() == productId) {
                     if (assetsStorages[i].getQuantity() > 0) {
                         System.out.print("Enter a quantity you wanna sell: ");
-                        if(scanner.hasNextInt()) {
+                        if (scanner.hasNextInt()) {
                             int quantity = scanner.nextInt();
                             if (assetsStorages[i].getQuantity() > quantity) {
                                 assetsStorages[i].setQuantity(assetsStorages[i].getQuantity() - quantity);
@@ -184,7 +184,39 @@ public class AssetsManagement {
     }
 
     public void deleteProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
+        boolean notFound = true;
+        for (int i = 0; i < currentIndexPosition; i++) {
+            System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
+        }
 
+        System.out.print("Enter a product Id you wanna delete: ");
+        if (scanner.hasNextInt()) {
+            int productId = scanner.nextInt();
+
+            for (int i = 0; i < currentIndexPosition; i++) {
+                if (assetsStorages[i].getId() == productId) {
+                    for (int j = i; j < currentIndexPosition - 1; j++) {
+                        assetsStorages[j].setId(assetsStorages[j+1].getId());
+                        assetsStorages[j].setName(assetsStorages[j+1].getName());
+                        assetsStorages[j].setQuantity(assetsStorages[j+1].getQuantity());
+                        assetsStorages[j].setPrice(assetsStorages[j+1].getPrice());
+                    }
+                    currentIndexPosition--;
+                    assetsStorages[currentIndexPosition].setId(0);
+                    assetsStorages[currentIndexPosition].setName(null);
+                    assetsStorages[currentIndexPosition].setQuantity(0);
+                    assetsStorages[currentIndexPosition].setPrice(0);
+                    notFound = false;
+                }
+            }
+        } else{
+            String invalidInput = scanner.next();
+            System.out.println(invalidInput + ": is a invalid input");
+        }
+
+        if(notFound) {
+            System.out.println("Product not found");
+        }
     }
 
     public void getLowStockProduct(AssetsStorage[] assetsStorages) {
@@ -231,7 +263,7 @@ public class AssetsManagement {
                     default -> System.out.println("Invalid choice please choose listed number only");
                 }
             } else {
-                String invalidInput = scanner.next();
+                scanner.next();
                 System.out.println("Invalid input choose one the option");
             }
         }
