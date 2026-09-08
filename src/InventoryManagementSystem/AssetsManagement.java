@@ -72,8 +72,8 @@ public class AssetsManagement {
 
     public void updateProduct(AssetsStorage[] assetsStorages, Scanner scanner) {
         boolean notFound = true;
-        String productName = "";
-        int productQuantity = 0;
+        String productName;
+        int productQuantity;
         double productPrice = 0;
         for (int i = 0; i < currentIndexPosition; i++) {
             System.out.println(assetsStorages[i].getId() + " " + assetsStorages[i].getName() + " " + assetsStorages[i].getQuantity() + " " + assetsStorages[i].getPrice());
@@ -91,6 +91,10 @@ public class AssetsManagement {
                     if (scanner.hasNextInt()) {
                         productQuantity = scanner.nextInt();
                     } else {
+                        productName = assetsStorages[i].getName();
+                        productQuantity = assetsStorages[i].getQuantity();
+                        productPrice = assetsStorages[i].getPrice();
+
                         String invalidInput = scanner.next();
                         System.out.println(invalidInput + ": is a invalid input");
                     }
@@ -157,7 +161,7 @@ public class AssetsManagement {
                         System.out.print("Enter a quantity you wanna sell: ");
                         if (scanner.hasNextInt()) {
                             int quantity = scanner.nextInt();
-                            if (assetsStorages[i].getQuantity() > quantity) {
+                            if (assetsStorages[i].getQuantity() >= quantity) {
                                 assetsStorages[i].setQuantity(assetsStorages[i].getQuantity() - quantity);
                                 System.out.println("Product sold total is: " + quantity * assetsStorages[i].getPrice());
                             } else {
